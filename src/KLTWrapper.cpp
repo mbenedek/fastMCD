@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <highgui.h>
+#include <opencv/cv.hpp>
 
 KLTWrapper::KLTWrapper(void)
 {
@@ -149,7 +150,7 @@ void KLTWrapper::RunTrack(IplImage * imgGray, IplImage * prevGray)
 
 void KLTWrapper::SwapData(IplImage * imgGray)
 {
-	cvCopyImage(imgGray, imgPrevGray);
+	cvCopy(imgGray, imgPrevGray);
 	CV_SWAP(prev_pyramid, pyramid, swap_temp);
 	CV_SWAP(points[0], points[1], swap_points);
 }
@@ -177,7 +178,7 @@ void KLTWrapper::MakeHomoGraphy(int *pnMatch, int nCnt)
 
 	_pt1 = cvMat(1, nCnt, CV_32FC2, &pt1[0]);
 	_pt2 = cvMat(1, nCnt, CV_32FC2, &pt2[0]);
-	if (!cvFindHomography(&_pt1, &_pt2, &_h, CV_RANSAC, 1))
+	if (!cvFindHomography(&_pt1, &_pt2, &_h, cv::RANSAC, 1))
 //      if(!cvFindHomography( &_pt1, &_pt2, &_h, CV_LMEDS, 1))
 	{
 		return;
